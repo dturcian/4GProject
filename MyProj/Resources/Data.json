@@ -1,0 +1,337 @@
+﻿{
+  "pumps": [
+    {
+      "name": "pump1",
+      "location": {
+        "lat": 45.749437,
+        "lng": 21.226271
+      },
+      "iconImage": {
+        "url": "Resources/pump2.png",
+        "scaledSize": ""
+      }
+    },
+    {
+      "name": "pump2",
+      "location": {
+        "lat": 45.749437,
+        "lng": 21.226971
+      },
+      "iconImage": {
+        "url": "Resources/pump2.png",
+        "scaledSize": ""
+      }
+    },
+    {
+      "name": "pump3",
+      "location": {
+        "lat": 45.749237,
+        "lng": 21.227871
+      },
+      "iconImage": {
+        "url": "Resources/pump2.png",
+        "scaledSize": ""
+      }
+    },
+    {
+      "name": "pump4",
+      "location": {
+        "lat": 45.750137,
+        "lng": 21.226771
+      },
+      "iconImage": {
+        "url": "Resources/pump2.png",
+        "scaledSize": ""
+      }
+    },
+    {
+      "name": "pump5",
+      "location": {
+        "lat": 45.749937,
+        "lng": 21.227371
+      },
+      "iconImage": {
+        "url": "Resources/pump2.png",
+        "scaledSize": ""
+      }
+    },
+    {
+      "name": "pump6",
+      "location": {
+        "lat": 45.750237,
+        "lng": 21.227871
+      },
+      "iconImage": {
+        "url": "Resources/pump2.png",
+        "scaledSize": ""
+      }
+    },
+    {
+      "name": "pump7",
+      "location": {
+        "lat": 45.750537,
+        "lng": 21.227371
+      },
+      "iconImage": {
+        "url": "Resources/pump2.png",
+        "scaledSize": ""
+      }
+    }
+  ],
+  "iconImageDeactivated": {
+    "url": "Resources/pump2.png",
+    "scaledSize": ""
+  },
+  "iconImageActivated": {
+    "url": "Resources/pumpSprinkle.png",
+    "scaledSize": ""
+  },
+  "zones": [
+    {
+      "name": "zone1",
+      "coords": [
+        {
+          "lat": 45.749146,
+          "lng": 21.225939
+        },
+        {
+          "lat": 45.749144,
+          "lng": 21.22611
+        },
+        {
+          "lat": 45.749745,
+          "lng": 21.2266
+        },
+        {
+          "lat": 45.749767,
+          "lng": 21.226366
+        },
+        {
+          "lat": 45.749146,
+          "lng": 21.225939
+        }
+
+      ],
+      "strokeColor": "#00FF00",
+      "strokeOpacity": 0.8,
+      "strokeWeight": 3,
+      "fillColor": "#00FF00",
+      "fillOpacity": 0.35
+    },
+    {
+      "name": "zone2",
+      "coords": [
+        {
+          "lat": 45.74914,
+          "lng": 21.226141
+        },
+        {
+          "lat": 45.749749,
+          "lng": 21.226627
+        },
+        {
+          "lat": 45.749653,
+          "lng": 21.227847
+        },
+        {
+          "lat": 45.749376,
+          "lng": 21.227399
+        },
+        {
+          "lat": 45.749249,
+          "lng": 21.226833
+        },
+        {
+          "lat": 45.749129,
+          "lng": 21.226474
+        },
+        {
+          "lat": 45.74914,
+          "lng": 21.226141
+        }
+
+      ],
+      "strokeColor": "#00FF00",
+      "strokeOpacity": 0.8,
+      "strokeWeight": 3,
+      "fillColor": "#00FF00",
+      "fillOpacity": 0.35
+    },
+    {
+      "name": "zone3",
+      "coords": [
+        {
+          "lat": 45.749782,
+          "lng": 21.228118
+        },
+        {
+          "lat": 45.749773,
+          "lng": 21.228196
+        },
+        {
+          "lat": 45.749223,
+          "lng": 21.228169
+        },
+        {
+          "lat": 45.749109,
+          "lng": 21.227885
+        },
+        {
+          "lat": 45.749133,
+          "lng": 21.226519
+        },
+        {
+          "lat": 45.749432,
+          "lng": 21.227606
+        },
+        {
+          "lat": 45.749782,
+          "lng": 21.228118
+        }
+
+      ],
+      "strokeColor": "#00FF00",
+      "strokeOpacity": 0.8,
+      "strokeWeight": 3,
+      "fillColor": "#00FF00",
+      "fillOpacity": 0.35
+    },
+    {
+      "name": "zone4",
+      "coords": [
+        {
+          "lat": 45.749784,
+          "lng": 21.22638
+        },
+        {
+          "lat": 45.750651,
+          "lng": 21.226924
+        },
+        {
+          "lat": 45.750385,
+          "lng": 21.2273
+        },
+        {
+          "lat": 45.750241,
+          "lng": 21.227072
+        },
+        {
+          "lat": 45.750003,
+          "lng": 21.226828
+        },
+        {
+          "lat": 45.749762,
+          "lng": 21.226611
+        },
+        {
+          "lat": 45.749784,
+          "lng": 21.22638
+        }
+
+      ],
+      "strokeColor": "#00FF00",
+      "strokeOpacity": 0.8,
+      "strokeWeight": 3,
+      "fillColor": "#00FF00",
+      "fillOpacity": 0.35
+    },
+    {
+      "name": "zone5",
+      "coords": [
+        {
+          "lat": 45.749764,
+          "lng": 21.226653
+        },
+        {
+          "lat": 45.749687,
+          "lng": 21.227893
+        },
+        {
+          "lat": 45.749801,
+          "lng": 21.228096
+        },
+        {
+          "lat": 45.750366,
+          "lng": 21.227313
+        },
+        {
+          "lat": 45.750099,
+          "lng": 21.22697
+        },
+        {
+          "lat": 45.749764,
+          "lng": 21.226653
+        }
+
+      ],
+      "strokeColor": "#00FF00",
+      "strokeOpacity": 0.8,
+      "strokeWeight": 3,
+      "fillColor": "#00FF00",
+      "fillOpacity": 0.35
+    },
+    {
+      "name": "zone6",
+      "coords": [
+        {
+          "lat": 45.750379,
+          "lng": 21.227351
+        },
+        {
+          "lat": 45.750709,
+          "lng": 21.22811
+        },
+        {
+          "lat": 45.749801,
+          "lng": 21.228169
+        },
+        {
+          "lat": 45.750379,
+          "lng": 21.227351
+        }
+
+      ],
+      "strokeColor": "#00FF00",
+      "strokeOpacity": 0.8,
+      "strokeWeight": 3,
+      "fillColor": "#00FF00",
+      "fillOpacity": 0.35
+    },
+    {
+      "name": "zone7",
+      "coords": [
+        {
+          "lat": 45.750402,
+          "lng": 21.227319
+        },
+        {
+          "lat": 45.750707,
+          "lng": 21.228046
+        },
+        {
+          "lat": 45.750739,
+          "lng": 21.227386
+        },
+        {
+          "lat": 45.750793,
+          "lng": 21.226999
+        },
+        {
+          "lat": 45.750675,
+          "lng": 21.226935
+        },
+        {
+          "lat": 45.750402,
+          "lng": 21.227319
+        }
+
+      ],
+      "strokeColor": "#00FF00",
+      "strokeOpacity": 0.8,
+      "strokeWeight": 3,
+      "fillColor": "#00FF00",
+      "fillOpacity": 0.35
+    }
+  ]
+
+}
