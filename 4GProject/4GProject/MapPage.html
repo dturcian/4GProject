@@ -17,13 +17,26 @@
 <body>
     <h1 align="center">Irrigation System</h1>
     <div align="center">
-        <input type="button" id="temperature" class="btn" value="Temperature" align="center" onclick="showMessage(this.value)">
-        <input type="button" id="humidity" class="btn" style="background-color: #0000CC;" value="Humidity" align="center" onclick="showMessage()"><br />
+        <input type="button" id="temperature" class="btn" style="background-color: #CCAACC;" value="Temperature" align="center" onclick="showMessage(this.value)">
+        <input type="button" id="humidity" class="btn" style="background-color: #6707F7;" value="Humidity" align="center" onclick="showMessage()"><br />
         <p id="myText" align="center" style="display: none;"></p>
     </div>
     <div id="map"></div>
+    <div align="center">
+        <input type="button" id="chart" class="btn" style="background-color: #808080;" value="History" align="center" onclick="showChart()">
+    </div>
+    <div class="container" id="myChartContainer">
+        <canvas id="myChart"></canvas>
+        </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
+        var temp;
+        var humidity;
+        var tempArray = new Array();
+        var humidityArray = new Array();
+
         var map;
         var imageActivated;
         var imageDeactivated;
@@ -32,8 +45,27 @@
 
         var Zones = new Array();
         var Markers = new Array();
+        var infoWindow = new Array();
+
+        var selectedTemperature = false;
+        var selectedHumidity = false;
+
         var selected;
 
+        var myChart = document.getElementById('myChart').getContext('2d');
+        var dataChart = new Chart(myChart, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: '',
+                    data: [],
+                    backgroundColor:'#808000'
+                }]
+            }
+        });
+        $('#myChartContainer').hide();
+        
     //Map options
     function showMessage(whichPressed)
     {
@@ -41,28 +73,78 @@
             clearInterval(refreshIntervalId);
     	if(whichPressed === "Temperature")
         {
+            selectedTemperature = true;
+            selectedHumidity = false;
+            dataChart.data.datasets[0].backgroundColor = "#00daaa";
+            dataChart.data.datasets[0].label = 'Temperature';
+            
             if (Zones) {
                 for (var i = 0; i < Zones.length; i++) {
-                    Zones[i].setOptions({ strokeColor: "#FF0000", fillColor: '#FF0000' });
+                    var index = i + 1;
+                    infoWindow[i].setOptions({ content: "<h1>Zone" + index + "</h1><br><h1>Temperature:" + temp + "*C</h1>" });
+                    dataChart.data.datasets[0].data[i] = tempArray[i];
+                    if (temp >= 0) {
+                        Zones[i].setOptions({ strokeColor: "#FF0000", fillColor: '#FF0000' });
+                        if (temp < 5) {
+                            Zones[i].setOptions({ fillOpacity: 0.1 });
+                        }
+                        else
+                        {
+                            Zones[i].setOptions({ fillOpacity: temp * 1.5 /100 });
+                        }
+                    }
+                    else
+                    {
+                        if (temp > -5) {
+                            Zones[i].setOptions({ fillOpacity: 0.1 });
+                        }
+                        else {
+                            Zones[i].setOptions({ fillOpacity: Math.abs(temp) * 1.5 / 100 });
+                        }
+                        Zones[i].setOptions({ strokeColor: "#0000FF", fillColor: '#0000FF' });
+                    }
+                    
                 }
+                dataChart.update();
             }
             document.getElementById('myText').innerHTML = "Temperature for this zone";
             selected = true;
-            refreshIntervalId = setInterval(changeIcon, 1000);
+            //refreshIntervalId = setInterval(changeIcon, 1000);
     	}
     	else
         {
+            selectedTemperature = false;
+            selectedHumidity = true;
             clearInterval(refreshIntervalId);
+            dataChart.data.datasets[0].backgroundColor = "#6707F7";
+            dataChart.data.datasets[0].label = 'Humidity';
+            
             if (Zones) {
                 for (var i = 0; i < Zones.length; i++) {
-                    Zones[i].setOptions({ strokeColor: "#0000FF", fillColor: '#0000FF' });
+                    var index = i + 1;
+                    infoWindow[i].setOptions({ content: "<h1>Zone" + index + "</h1><br><h1>Humidity:" + humidity + "%</h1>" });
+                    dataChart.data.datasets[0].data[i] = humidityArray[i];
+                    Zones[i].setOptions({ strokeColor: "#6707F7", fillColor: '#6707F7' });
+                    if (humidity > 90)
+                        Zones[i].setOptions({ fillOpacity: 0.9 });
+                    else if (humidity < 10)
+                        Zones[i].setOptions({ fillOpacity: 0.1 });
+                    else
+                        Zones[i].setOptions({ fillOpacity: humidity/100 });
+                        
                 }
             }
-    		document.getElementById('myText').innerHTML ="Humidity for this zone";
+            document.getElementById('myText').innerHTML = "Humidity for this zone";
+            dataChart.update();
     	}
 
     	document.getElementById('myText').style.display="block";
     }
+
+        function showChart()
+        {
+            $('#myChartContainer').toggle();
+        }
 
         function changeIcon()
         {
@@ -90,6 +172,24 @@
           //new Map
             map = new google.maps.Map(document.getElementById('map'), options);
             $.getJSON("Resources/Data.json", readData);
+            $.getJSON("Resources/DataFromWorker.json", readDataFromWorker);
+            setInterval(function () {
+                $.getJSON("Resources/DataFromWorker.json", readDataFromWorker);
+            }, 5000);
+
+            function readDataFromWorker(data) {
+                var myData = data.values;
+                temp = myData[myData.length-1].temp;
+                humidity = myData[myData.length-1].humidity;
+
+                for (i = 0; i < myData.length; i++)
+                {
+                    tempArray[i] = myData[i].temp;
+                    humidityArray[i] = myData[i].humidity;
+                    dataChart.data.labels[i] = myData[i].date;
+                }
+                
+            };
 
             function readData(data) {
                 var pumps = data.pumps;
@@ -116,7 +216,6 @@
                         strokeColor: zone.strokeColor,
                         strokeOpacity: zone.strokeOpacity,
                         strokeWeight: zone.strokeWeight,
-                        fillColor: zone.fillColor,
                         fillOpacity: zone.fillOpacity,
                         map: map
                     }
@@ -131,7 +230,16 @@
 
                  if (imageDeactivated) {
                     Markers[index].setIcon(imageDeactivated);
-                }
+                 }
+                 var i = index + 1;
+                 infoWindow[index] = new google.maps.InfoWindow({
+                     content: "<h1>Zone" + i +"</h1><br><h1>Temperature:-</h1><br><h1>Humidity:-</h1>"
+                 })
+
+                 Markers[index].addListener("click", function () {
+                     infoWindow[index].open(map, Markers[index]);
+                     setTimeout(function () { infoWindow[index].close(); }, 5000);
+                 });
             }
 
     }

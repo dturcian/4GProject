@@ -1,0 +1,41 @@
+﻿{
+  "values": [
+    {
+      "date": "01.01.2017",
+      "temp": 14,
+      "humidity": 45
+    },
+    {
+      "date": "02.01.2017",
+      "temp": 13,
+      "humidity": 55
+    },
+    {
+      "date": "03.01.2017",
+      "temp": 12,
+      "humidity": 60
+    },
+    {
+      "date": "04.01.2017",
+      "temp": 10,
+      "humidity": 40
+    },
+    {
+      "date": "05.01.2017",
+      "temp": 7,
+      "humidity": 25
+    },
+    {
+      "date": "06.01.2017",
+      "temp": 5,
+      "humidity": 20
+    },
+    {
+      "date": "07.01.2017",
+      "temp": 2,
+      "humidity": 40
+    }
+
+  ]
+
+}
