@@ -16,6 +16,7 @@ namespace TransferWeatherInformation
         {
             while (true)
             {
+                //collects weather information from different cities
                 var zona1 = weatherInformation("timisoara/ro/");
                 var zona2 = weatherInformation("iasi/ro/");
                 var zona3 = weatherInformation("brasov/ro/");
@@ -26,6 +27,7 @@ namespace TransferWeatherInformation
 
                 OpenConnDB();
 
+                //save the informations in DB
                 SaveInfomationInDB(zona1, 1);
                 SaveInfomationInDB(zona2, 2);
                 SaveInfomationInDB(zona3, 3);
@@ -36,7 +38,8 @@ namespace TransferWeatherInformation
 
                 CloseConnDB();
 
-                Thread.Sleep(1 * 60 * 1000);
+                //every 10 minutes collects weather information
+                Thread.Sleep(10 * 60 * 1000);
             }
         }
 
@@ -52,6 +55,7 @@ namespace TransferWeatherInformation
             conn.Close();
         }
 
+        //save informations in DB
         public void SaveInfomationInDB(Weather zona, int nrZona)
         {
             SqlCommand command = new SqlCommand("INSERT INTO WeatherInformationTable VALUES " +
@@ -59,25 +63,65 @@ namespace TransferWeatherInformation
                 "@zonaWinSpeed, @zonaTown, @zonaTFCond, @zonaTFHigh, @zonaTFLow)", conn);
             // Add the parameters.
             command.Parameters.Add(new SqlParameter("nrZona", nrZona));
-            command.Parameters.Add(new SqlParameter("zonaTemperature", int.Parse(zona.Temperature)));
-            command.Parameters.Add(new SqlParameter("zonaHumidity", int.Parse(zona.Humidity)));
+            command.Parameters.Add(new SqlParameter("zonaTemperature", VerificareDate(FahrenheitToCelsius(int.Parse(zona.Temperature)), "temperature")));
+            command.Parameters.Add(new SqlParameter("zonaHumidity", VerificareDate(int.Parse(zona.Humidity), "humidity")));
             command.Parameters.Add(new SqlParameter("zonaDate", DateTime.Now));
             command.Parameters.Add(new SqlParameter("zonaCondition", zona.Condition));
-            command.Parameters.Add(new SqlParameter("zonaWinSpeed", zona.WinSpeed));
+            command.Parameters.Add(new SqlParameter("zonaWinSpeed", VerificareDate(int.Parse(zona.WinSpeed), "winspeed"))).ToString();
             command.Parameters.Add(new SqlParameter("zonaTown", zona.Town));
             command.Parameters.Add(new SqlParameter("zonaTFCond", zona.TFCond));
-            command.Parameters.Add(new SqlParameter("zonaTFHigh", int.Parse(zona.TFHigh)));
-            command.Parameters.Add(new SqlParameter("zonaTFLow", int.Parse(zona.TFLow)));
-
-
+            command.Parameters.Add(new SqlParameter("zonaTFHigh", VerificareDate(FahrenheitToCelsius(int.Parse(zona.TFHigh)), "temperature")));
+            command.Parameters.Add(new SqlParameter("zonaTFLow", VerificareDate(FahrenheitToCelsius(int.Parse(zona.TFLow)), "temperature")));
+            
             command.ExecuteNonQuery();
         }
 
-        public void VerificareDate()
+        const int errorCodeParameterWeather = 777;
+        public int VerificareDate(int parameterWeather, string typeParameter)
         {
-
+            switch(typeParameter)
+            {
+                case "temperature":
+                    if(parameterWeather > 65 || parameterWeather < -95)
+                    {
+                        return errorCodeParameterWeather;
+                    }
+                    else
+                    {
+                        return parameterWeather;
+                    }
+                case "humidity":
+                    if (parameterWeather > 100 || parameterWeather < 0)
+                    {
+                        return errorCodeParameterWeather;
+                    }
+                    else
+                    {
+                        return parameterWeather;
+                    }
+                case "winspeed":
+                    if (parameterWeather > 650 || parameterWeather < 0)
+                    {
+                        return errorCodeParameterWeather;
+                    }
+                    else
+                    {
+                        return parameterWeather;
+                    }
+                default:
+                    return parameterWeather;
+            }
         }
 
+        //conversion from Fahrenheit to Celsius
+        public int FahrenheitToCelsius(int tempFahrenheit)
+        {
+            int tempCelsius = Convert.ToInt16((tempFahrenheit - 32) / 1.8);
+
+            return tempCelsius;
+        }
+
+        //collects weather information
         public Weather weatherInformation(string city)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8000/4gapi/weather/" + city);
