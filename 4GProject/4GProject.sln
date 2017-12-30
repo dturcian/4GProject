@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4GProject", "4GProject\4GProject.csproj", "{E1FCE9D0-CBE6-40BC-A85B-CCBA1BD7B8BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransferWeatherInformation", "TransferWeatherInformation\TransferWeatherInformation.csproj", "{8FA65C23-F614-4387-8CA3-7E17EFA042D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{E1FCE9D0-CBE6-40BC-A85B-CCBA1BD7B8BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1FCE9D0-CBE6-40BC-A85B-CCBA1BD7B8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1FCE9D0-CBE6-40BC-A85B-CCBA1BD7B8BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA65C23-F614-4387-8CA3-7E17EFA042D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA65C23-F614-4387-8CA3-7E17EFA042D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA65C23-F614-4387-8CA3-7E17EFA042D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA65C23-F614-4387-8CA3-7E17EFA042D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

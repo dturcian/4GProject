@@ -13,7 +13,7 @@ namespace _4GProject.Controllers
     {
         [HttpGet]
         [Route("4gapi/weather/{town}/{country}")]
-        public string GetWeatherByTown(string town, string country)
+        public HttpResponseMessage GetWeatherByTown(string town, string country)
         {
             var wObj = new Weather();
             try
@@ -48,11 +48,14 @@ namespace _4GProject.Controllers
             }
             catch
             {
-                return JsonConvert.SerializeObject(new { Error = "Weather error" }, Newtonsoft.Json.Formatting.Indented);
+                //return JsonConvert.SerializeObject(new { Error = "Weather error" }, Newtonsoft.Json.Formatting.Indented);
             }
 
-            return JsonConvert.SerializeObject(wObj, Newtonsoft.Json.Formatting.Indented);
-
+            string json = JsonConvert.SerializeObject(wObj);
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+            };
         }
         [HttpGet]
         [Route("4gapi/weather/{longitude:decimal}/{latitude:decimal}/")]
