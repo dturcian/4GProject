@@ -9,8 +9,9 @@ namespace TransferWeatherInformation
 {
     class Worker
     {
-        private SqlConnection conn;
-        private const string connectionString = "Server=tcp:4gserverdatc.database.windows.net,1433;Initial Catalog=4G;Persist Security Info=False;User ID=davidtorje;Password=4g@datc1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private SqlConnection _conn;
+        private SqlTransaction _trans;
+        private const string ConnectionString = "Server=tcp:4gserverdatc.database.windows.net,1433;Initial Catalog=4G;Persist Security Info=False;User ID=davidtorje;Password=4g@datc1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         public void Process()
         {
@@ -25,38 +26,49 @@ namespace TransferWeatherInformation
                 var zona7 = weatherInformation("cluj/ro/");
 
                 OpenConnDB();
+                _trans = _conn.BeginTransaction();
 
-                SaveInfomationInDB(zona1, 1);
-                SaveInfomationInDB(zona2, 2);
-                SaveInfomationInDB(zona3, 3);
-                SaveInfomationInDB(zona4, 4);
-                SaveInfomationInDB(zona5, 5);
-                SaveInfomationInDB(zona6, 6);
-                SaveInfomationInDB(zona7, 7);
+                try
+                {
+                    SaveInfomationInDB(zona1, 1);
+                    SaveInfomationInDB(zona2, 2);
+                    SaveInfomationInDB(zona3, 3);
+                    SaveInfomationInDB(zona4, 4);
+                    SaveInfomationInDB(zona5, 5);
+                    SaveInfomationInDB(zona6, 6);
+                    SaveInfomationInDB(zona7, 7);
+
+                    _trans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    _trans.Rollback();
+                    Console.WriteLine(ex.ToString());
+                }
 
                 CloseConnDB();
 
-                Thread.Sleep(1 * 60 * 1000);
+                Thread.Sleep(5 * 60 * 1000);
             }
         }
 
         public void OpenConnDB()
         {
-            conn = new SqlConnection();
-            conn.ConnectionString = connectionString;
-            conn.Open();
+            _conn = new SqlConnection();
+            _conn.ConnectionString = ConnectionString;
+            _conn.Open();
         }
 
         public void CloseConnDB()
         {
-            conn.Close();
+            _conn.Close();
         }
 
         public void SaveInfomationInDB(Weather zona, int nrZona)
         {
             SqlCommand command = new SqlCommand("INSERT INTO WeatherInformationTable VALUES " +
                 "(@nrZona, @zonaTemperature, @zonaHumidity, @zonaDate, @zonaCondition, " +
-                "@zonaWinSpeed, @zonaTown, @zonaTFCond, @zonaTFHigh, @zonaTFLow)", conn);
+                "@zonaWinSpeed, @zonaTown, @zonaTFCond, @zonaTFHigh, @zonaTFLow)", _conn, _trans);
             // Add the parameters.
             command.Parameters.Add(new SqlParameter("nrZona", nrZona));
             command.Parameters.Add(new SqlParameter("zonaTemperature", int.Parse(zona.Temperature)));
@@ -68,8 +80,7 @@ namespace TransferWeatherInformation
             command.Parameters.Add(new SqlParameter("zonaTFCond", zona.TFCond));
             command.Parameters.Add(new SqlParameter("zonaTFHigh", int.Parse(zona.TFHigh)));
             command.Parameters.Add(new SqlParameter("zonaTFLow", int.Parse(zona.TFLow)));
-
-
+            
             command.ExecuteNonQuery();
         }
 

@@ -31,3 +31,20 @@ E:\Facultate\An IV\DATC\4GProject-master\4GProject-master\4GProject\4GProject\bi
 E:\Facultate\An IV\DATC\4GProject-master\4GProject-master\4GProject\4GProject\obj\Debug\4GProject.csprojResolveAssemblyReference.cache
 E:\Facultate\An IV\DATC\4GProject-master\4GProject-master\4GProject\4GProject\obj\Debug\4GProject.dll
 E:\Facultate\An IV\DATC\4GProject-master\4GProject-master\4GProject\4GProject\obj\Debug\4GProject.pdb
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\4GProject.dll.config
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\4GProject.dll
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\4GProject.pdb
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\Newtonsoft.Json.dll
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\System.Net.Http.Formatting.dll
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\System.Web.Http.dll
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\System.Web.Http.WebHost.dll
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\Newtonsoft.Json.xml
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\System.Net.Http.Formatting.xml
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\System.Web.Http.xml
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\bin\System.Web.Http.WebHost.xml
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\obj\Debug\4GProject.csprojResolveAssemblyReference.cache
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\obj\Debug\4GProject.csproj.CoreCompileInputs.cache
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\obj\Debug\4GProject.dll
+D:\Work\AC_an4\DATC\4GProject\4GProject\4GProject\obj\Debug\4GProject.pdb

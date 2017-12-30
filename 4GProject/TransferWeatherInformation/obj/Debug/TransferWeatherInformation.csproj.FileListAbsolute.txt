@@ -6,3 +6,12 @@ E:\Facultate\An IV\DATC\4GProject-master\4GProject-master\4GProject\TransferWeat
 E:\Facultate\An IV\DATC\4GProject-master\4GProject-master\4GProject\TransferWeatherInformation\obj\Debug\TransferWeatherInformation.csprojResolveAssemblyReference.cache
 E:\Facultate\An IV\DATC\4GProject-master\4GProject-master\4GProject\TransferWeatherInformation\obj\Debug\TransferWeatherInformation.exe
 E:\Facultate\An IV\DATC\4GProject-master\4GProject-master\4GProject\TransferWeatherInformation\obj\Debug\TransferWeatherInformation.pdb
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\bin\Debug\TransferWeatherInformation.exe.config
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\bin\Debug\TransferWeatherInformation.exe
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\bin\Debug\TransferWeatherInformation.pdb
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\bin\Debug\Newtonsoft.Json.dll
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\bin\Debug\Newtonsoft.Json.xml
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\obj\Debug\TransferWeatherInformation.csprojResolveAssemblyReference.cache
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\obj\Debug\TransferWeatherInformation.csproj.CoreCompileInputs.cache
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\obj\Debug\TransferWeatherInformation.exe
+D:\Work\AC_an4\DATC\4GProject\4GProject\TransferWeatherInformation\obj\Debug\TransferWeatherInformation.pdb

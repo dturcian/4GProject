@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Results;
 using System.Xml;
 using _4GProject.Models;
 
@@ -11,6 +13,69 @@ namespace _4GProject.Controllers
 {
     public class DataGeneratorController : ApiController
     {
+        private SqlConnection _conn;
+        private const string ConnectionString = "Server=tcp:4gserverdatc.database.windows.net,1433;Initial Catalog=4G;Persist Security Info=False;User ID=davidtorje;Password=4g@datc1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private List<Record> _records;
+
+        [HttpGet]
+        [Route("4gapi/records/{max}")]
+        public HttpResponseMessage GetLastRecords(string max)
+        {
+            var top = string.Empty;
+            int result;
+            if (int.TryParse(max, out result))
+                top = "TOP " + result;
+
+            _records = new List<Record>();
+
+            _conn = new SqlConnection
+            {
+                ConnectionString = ConnectionString
+            };
+            try
+            {
+                _conn.Open();
+
+                var command = new SqlCommand("SELECT " + top + " * FROM WeatherInformationTable ORDER BY Date DESC", _conn);
+
+                var reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        var temp = Math.Round(((int) reader["Temperature"] - 32) / 1.8);
+                        _records.Add(new Record()
+                        {
+                            Zone = (int)reader["Zone"],
+                            Temperature = temp.ToString(CultureInfo.InvariantCulture),
+                            Humidity = reader["Humidity"].ToString(),
+                            Date = (DateTime)reader["Date"],
+                            Condition = reader["Condition"].ToString(),
+                            Town = reader["Town"].ToString(),
+                            WinSpeed = reader["WinSpeed"].ToString(),
+                            TFCond = reader["TFCond"].ToString(),
+                            TFHigh = reader["TFHigh"].ToString(),
+                            TFLow = reader["TFLow"].ToString()
+                        });
+                    }
+                }
+                finally
+                {
+                    reader.Close();
+                }
+            }
+            finally
+            {
+                _conn.Close();
+            }
+
+            var json = JsonConvert.SerializeObject(_records);
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+            };
+        }
+
         [HttpGet]
         [Route("4gapi/weather/{town}/{country}")]
         public HttpResponseMessage GetWeatherByTown(string town, string country)
@@ -48,18 +113,19 @@ namespace _4GProject.Controllers
             }
             catch
             {
-                //return JsonConvert.SerializeObject(new { Error = "Weather error" }, Newtonsoft.Json.Formatting.Indented);
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
 
-            string json = JsonConvert.SerializeObject(wObj);
+            var json = JsonConvert.SerializeObject(wObj);
             return new HttpResponseMessage()
             {
                 Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
             };
         }
+
         [HttpGet]
         [Route("4gapi/weather/{longitude:decimal}/{latitude:decimal}/")]
-        public string GetWeather(decimal longitude, decimal latitude)
+        public HttpResponseMessage GetWeather(decimal longitude, decimal latitude)
         {
             var wObj = new Weather();
             try
@@ -96,10 +162,14 @@ namespace _4GProject.Controllers
             }
             catch
             {
-                return JsonConvert.SerializeObject(new {Error = "Weather error"}, Newtonsoft.Json.Formatting.Indented);
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
 
-            return JsonConvert.SerializeObject(wObj, Newtonsoft.Json.Formatting.Indented);
+            var json = JsonConvert.SerializeObject(wObj);
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+            };
 
         }
 
