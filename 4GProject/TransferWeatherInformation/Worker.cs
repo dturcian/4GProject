@@ -15,6 +15,7 @@ namespace TransferWeatherInformation
 
         public void Process()
         {
+            Console.WriteLine("Porcess started...");
             while (true)
             {
                 //collects weather information from different cities
@@ -48,6 +49,7 @@ namespace TransferWeatherInformation
                 }
 
                 CloseConnDB();
+                Console.WriteLine("[" + DateTime.Now + "] Datele au fost adaugate in baza de date...");
 
                 //every 10 minutes collects weather information
                 Thread.Sleep(10 * 60 * 1000);

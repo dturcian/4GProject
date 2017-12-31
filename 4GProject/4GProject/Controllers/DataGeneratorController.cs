@@ -43,11 +43,10 @@ namespace _4GProject.Controllers
                 {
                     while (reader.Read())
                     {
-                        var temp = Math.Round(((int) reader["Temperature"] - 32) / 1.8);
                         _records.Add(new Record()
                         {
                             Zone = (int)reader["Zone"],
-                            Temperature = temp.ToString(CultureInfo.InvariantCulture),
+                            Temperature = reader["Temperature"].ToString(),
                             Humidity = reader["Humidity"].ToString(),
                             Date = (DateTime)reader["Date"],
                             Condition = reader["Condition"].ToString(),
