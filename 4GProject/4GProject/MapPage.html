@@ -24,6 +24,15 @@
     <div id="map"></div>
     <div align="center">
         <input type="button" id="chart" class="btn" style="background-color: #808080;" value="History" align="center" onclick="showChart()">
+        Zone:<select id="selectZone" onchange="changeHistoryData()">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+        </select> 
     </div>
     <div class="container" id="myChartContainer">
         <canvas id="myChart"></canvas>
@@ -32,8 +41,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
-        var temp;
-        var humidity;
+        var allTempArray = new Array();
+        var allHumidityArray = new Array();
+        var allDates = new Array();
         var tempArray = new Array();
         var humidityArray = new Array();
 
@@ -42,6 +52,7 @@
         var imageDeactivated;
 
         var refreshIntervalId;
+        var intervalID = new Array();
 
         var Zones = new Array();
         var Markers = new Array();
@@ -50,6 +61,7 @@
         var selectedTemperature = false;
         var selectedHumidity = false;
 
+        var started = false;
         var selected;
 
         var myChart = document.getElementById('myChart').getContext('2d');
@@ -73,33 +85,35 @@
             clearInterval(refreshIntervalId);
     	if(whichPressed === "Temperature")
         {
+            
             selectedTemperature = true;
             selectedHumidity = false;
+            changeHistoryData();
             dataChart.data.datasets[0].backgroundColor = "#00daaa";
             dataChart.data.datasets[0].label = 'Temperature';
             
             if (Zones) {
                 for (var i = 0; i < Zones.length; i++) {
                     var index = i + 1;
-                    infoWindow[i].setOptions({ content: "<h1>Zone" + index + "</h1><br><h1>Temperature:" + temp + "*C</h1>" });
-                    dataChart.data.datasets[0].data[i] = tempArray[i];
-                    if (temp >= 0) {
+                    infoWindow[i].setOptions({ content: "<h1>Zone" + index + "</h1><br><h1>Temperature:" + tempArray[i] + "*C</h1>" });
+                    
+                    if (tempArray[i] >= 0) {
                         Zones[i].setOptions({ strokeColor: "#FF0000", fillColor: '#FF0000' });
-                        if (temp < 5) {
+                        if (tempArray[i] < 5) {
                             Zones[i].setOptions({ fillOpacity: 0.1 });
                         }
                         else
                         {
-                            Zones[i].setOptions({ fillOpacity: temp * 1.5 /100 });
+                            Zones[i].setOptions({ fillOpacity: tempArray[i] * 1.5 /100 });
                         }
                     }
                     else
                     {
-                        if (temp > -5) {
+                        if (tempArray[i] > -5) {
                             Zones[i].setOptions({ fillOpacity: 0.1 });
                         }
                         else {
-                            Zones[i].setOptions({ fillOpacity: Math.abs(temp) * 1.5 / 100 });
+                            Zones[i].setOptions({ fillOpacity: Math.abs(tempArray[i]) * 1.5 / 100 });
                         }
                         Zones[i].setOptions({ strokeColor: "#0000FF", fillColor: '#0000FF' });
                     }
@@ -109,12 +123,19 @@
             }
             document.getElementById('myText').innerHTML = "Temperature for this zone";
             selected = true;
+            if (started == false)
+            {
+                setInterval(verifyIfDry, 1000);
+                started = true;
+            }
             //refreshIntervalId = setInterval(changeIcon, 1000);
     	}
     	else
         {
+            
             selectedTemperature = false;
             selectedHumidity = true;
+            changeHistoryData();
             clearInterval(refreshIntervalId);
             dataChart.data.datasets[0].backgroundColor = "#6707F7";
             dataChart.data.datasets[0].label = 'Humidity';
@@ -122,46 +143,115 @@
             if (Zones) {
                 for (var i = 0; i < Zones.length; i++) {
                     var index = i + 1;
-                    infoWindow[i].setOptions({ content: "<h1>Zone" + index + "</h1><br><h1>Humidity:" + humidity + "%</h1>" });
-                    dataChart.data.datasets[0].data[i] = humidityArray[i];
+                    infoWindow[i].setOptions({ content: "<h1>Zone" + index + "</h1><br><h1>Humidity:" + humidityArray[i] + "%</h1>" });
+                    
                     Zones[i].setOptions({ strokeColor: "#6707F7", fillColor: '#6707F7' });
-                    if (humidity > 90)
+                    if (humidityArray[i] > 90)
                         Zones[i].setOptions({ fillOpacity: 0.9 });
-                    else if (humidity < 10)
+                    else if (humidityArray[i] < 10)
                         Zones[i].setOptions({ fillOpacity: 0.1 });
                     else
-                        Zones[i].setOptions({ fillOpacity: humidity/100 });
+                        Zones[i].setOptions({ fillOpacity: humidityArray[i]/100 });
                         
                 }
             }
             document.getElementById('myText').innerHTML = "Humidity for this zone";
             dataChart.update();
+            if (started == false) {
+                setInterval(verifyIfDry, 1000);
+                started = true;
+            }
     	}
 
-    	document.getElementById('myText').style.display="block";
+        document.getElementById('myText').style.display = "block";
+        
     }
+
+        function verifyIfDry()
+        {
+            if (Zones) {
+                for (var i = 0; i < Zones.length; i++) {
+                    if (tempArray[i] > 5 && humidityArray[i] < 80) {
+                        intervalID[i] = setInterval(changeIcon(i), 1000);
+                    }
+                    else
+                    {
+                        clearInterval(intervalID[i]);
+                    }
+                }
+            }
+        }
+
+        function changeIcon(index) {
+            if (selected) {
+                Markers[index].setIcon(imageActivated);
+                selected = !selected;
+            }
+            else {
+                Markers[index].setIcon(imageDeactivated);
+                selected = !selected;
+            }
+        }
+
+        function changeHistoryData()
+        {
+            console.log("Change history data");
+            var zoneNumber = document.getElementById('selectZone').value;
+            var length = allHumidityArray.length;
+            var j = 0;
+            var k = 0
+            if (selectedTemperature) {
+                for (i = length - 1 - (zoneNumber - 1); i >= 0; i = i - 7) {
+                    if (allTempArray[i] != 777)
+                    {
+                        dataChart.data.labels[j] = allDates[k];
+                        dataChart.data.datasets[0].data[j] = allTempArray[i];
+                        j++;
+                    }
+                    k++;
+                    
+                }
+            }
+            else if (selectedHumidity)
+            {
+                for (i = length - 1 - (zoneNumber - 1); i >= 0; i = i - 7) {
+                    if (allHumidityArray[i] != 777)
+                    {
+                        dataChart.data.labels[j] = allDates[k];
+                        dataChart.data.datasets[0].data[j] = allHumidityArray[i];
+                        j++;
+                    }
+                    k++;
+                }
+            }
+            dataChart.update();
+           
+        }
 
         function showChart()
         {
+            changeHistoryData();
             $('#myChartContainer').toggle();
         }
 
-        function changeIcon()
-        {
-            if (selected) {
-                for (var i = 0; i < Markers.length; i++) {
-                    Markers[i].setIcon(imageActivated);
-                }
-                selected = !selected;
-            }
-            else
-            {
-                for (var i = 0; i < Markers.length; i++) {
-                    Markers[i].setIcon(imageDeactivated);
-                }
-                selected = !selected;
-            }
-        }
+        
+
+        //function changeIcon()
+        //{
+        //    if (selected) {
+        //        for (var i = 0; i < Markers.length; i++) {
+        //            Markers[i].setIcon(imageActivated);
+        //        }
+        //        selected = !selected;
+        //    }
+        //    else
+        //    {
+        //        for (var i = 0; i < Markers.length; i++) {
+        //            Markers[i].setIcon(imageDeactivated);
+        //        }
+        //        selected = !selected;
+        //    }
+        //}
 
         function initMap()
         {
@@ -172,21 +262,28 @@
           //new Map
             map = new google.maps.Map(document.getElementById('map'), options);
             $.getJSON("Resources/Data.json", readData);
-            $.getJSON("Resources/DataFromWorker.json", readDataFromWorker);
+            $.getJSON('http://localhost:8000/4gapi/records/all/', readDataFromUrl);
             setInterval(function () {
-                $.getJSON("Resources/DataFromWorker.json", readDataFromWorker);
-            }, 5000);
+                $.getJSON('http://localhost:8000/4gapi/records/all/', readDataFromUrl);
+            }, 1000 * 60 * 10);
 
-            function readDataFromWorker(data) {
-                var myData = data.values;
-                temp = myData[myData.length-1].temp;
-                humidity = myData[myData.length-1].humidity;
-
-                for (i = 0; i < myData.length; i++)
+            function readDataFromUrl(data) {
+                var length = data.length;
+                var j = 0;
+                for (i = 6; i >= 0; i--)
                 {
-                    tempArray[i] = myData[i].temp;
-                    humidityArray[i] = myData[i].humidity;
-                    dataChart.data.labels[i] = myData[i].date;
+                    tempArray[i] = data[i].Temperature;
+                    humidityArray[i] = data[i].Humidity;
+                    //dataChart.data.labels[i] = data[i].Date;
+                }
+                for (i = length - 1; i >= 0; i--)
+                {
+                    if ((i + 1) % 7 == 0)
+                    {
+                        allDates[j++] = data[i].Date;
+                    }
+                    allHumidityArray[i] = data[i].Humidity;
+                    allTempArray[i] = data[i].Temperature;
                 }
                 
             };
